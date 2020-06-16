@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- saved from url=(0095)file:///Users/dog2/Desktop/Temp/Learning/RPA/TagUI/src/MyProject/freebuf/result/pages/test.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>base title</title>
+    <link href="https://unpkg.com/tabulator-tables@4.6.3/dist/css/tabulator_midnight.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.6.3/dist/js/tabulator.min.js"></script>
+</head>
+<body bgcolor="#333">
+    <div id="example-table"></div>
+    <script>
+    var data=[
+{%data%}
+];
+
+    var tabledata = [];
+
+    for (var i = 0; i < data.length; i++) {
+        tabledata[i] = {
+            url: data[i][0],
+            title: data[i][1],
+            author: data[i][2],
+            time: data[i][3],
+            num_look: data[i][4],
+            num_comment: data[i][5],
+            level: data[i][6],
+            tags: data[i][7],
+            text: data[i][8],
+        }
+    };
+
+    data = null;
+    </script>
+
+    <script>
+    var BASE_URL = "https://www.freebuf.com/";
+    var table = new Tabulator("#example-table", {
+        data:tabledata, //assign data to table
+        layout:"fitData", //fit columns to width of table (optional)
+        //responsiveLayout:"collapse",
+        //autoResize:true,
+        //resizableRows:true,
+        height:"80%",
+        //resizableColumns:true, 
+        //responsiveLayoutCollapseStartOpen:true,
+        pagination:"local",     
+        paginationSize:25,     
+        columns:[ //Define Table Columns
+            //{formatter:"responsiveCollapse", width:30, minWidth:30, align:"center", resizable:false, headerSort:false},
+            {title:"No", formatter:"rownum"},
+            {title:"标题", field:"title", headerFilter:"input", width:"40%"},
+            {title:"发表日期", field:"time", headerFilter:"input", },
+            {title:"链接", field:"url", visible:false},
+            {title:"等级", field:"level", headerFilter:"input", },
+            {title:"浏览数", field:"num_look", headerFilter:"input", headerFilterPlaceholder:">=", headerFilterFunc:">="},
+            {title:"评论数", field:"num_comment", headerFilter:"input", headerFilterPlaceholder:">=",headerFilterFunc:">="},
+            {title:"作者", field:"author", headerFilter:"input", },
+            {title:"标签", field:"tags", headerFilter:"input", },
+            {title:"摘要", field:"text", headerFilter:"input", },
+        ],
+        rowFormatter:function(row){
+            //row - row component
+            var data = row.getData();
+            //var div_level = row.getElement().querySelector('[tabulator-field="title"]');
+            var div_level = row.getElement();
+            if(data.level === '现金奖励'){
+                div_level.style.color = "yellow";
+            }
+            else if(data.level.indexOf('金币') !== -1){ 
+                div_level.style.color = "lightgreen";
+            }
+            else if(data.level === '红色标题'){
+                div_level.style.color = "red";
+            }
+        },
+        rowClick:function(e, row){ //trigger an alert message when the row is clicked
+            window.open(BASE_URL + row.getData().url);
+        },
+    });
+    </script>
+
+</body></html>
