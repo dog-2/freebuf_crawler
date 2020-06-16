@@ -6,10 +6,18 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-class FreebufCrawlerPipeline(object):
+import json
+
+class JsonWriterPipeline:
+    encoding = 'utf-8'
+    
+    def open_spider(self, spider):
+        self.file = open('freebuf.jl', 'a', encoding=self.encoding)
+
+    def close_spider(self, spider):
+        self.file.close()
+
     def process_item(self, item, spider):
-        item.setdefault(
-            'tags', 
-            ['|'.join('tags') for tag in item.get('tags')]
-        )
+        line = json.dumps(dict(item), ensure_ascii=False) + '\n'
+        self.file.write(line)
         return item

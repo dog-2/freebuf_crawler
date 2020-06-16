@@ -11,9 +11,9 @@ import scrapy
 class FreebufCrawlerItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    url = scrapy.Field()
     title = scrapy.Field()
     time = scrapy.Field()
-    url = scrapy.Field()
     level = scrapy.Field() # 现金奖励/金币+n/红色标题
     num_look = scrapy.Field()
     num_comment = scrapy.Field()

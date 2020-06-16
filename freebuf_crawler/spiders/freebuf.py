@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-import os
-import sys
+# import os
+# import sys
 
-sys.path.insert(0, os.path.join(os.path.abspath('.'), 'freebuf_crawler'))
+# sys.path.insert(0, os.path.join(os.path.abspath('.'), 'freebuf_crawler'))
 
 from freebuf_crawler.items import FreebufCrawlerItem
 
 class FreebufSpider(scrapy.Spider):
     name = 'freebuf'
     allowed_domains = ['freebuf.com']
-    start_urls = ['https://www.freebuf.com/page/573']
+    start_urls = ['https://www.freebuf.com/page/1']
     base_url = 'https://www.freebuf.com/'
     page_url = 'https://www.freebuf.com/page/'
 
@@ -21,7 +21,7 @@ class FreebufSpider(scrapy.Spider):
 
     def parse(self, response: scrapy.http.Response):
         news_divs = response.xpath("//div[contains(@class, 'news-info')]")
-        if not news_divs:
+        if not news_divs: # no news any more in this page
             return
         has_new_news = False
         for news_div in news_divs:
@@ -49,7 +49,7 @@ class FreebufSpider(scrapy.Spider):
             "div[@class='news_bot']/span[@class='look']/strong/text()").extract()[-1].strip()
         author = news_div.xpath(
             "dl/dd/span[contains(@class, 'name')]/a/text()").extract_first()
-        if not author:
+        if not author: # when author is not a link
             author = news_div.xpath(
             "dl/dd/span[contains(@class, 'name')]/text()").extract_first()
         author = author.strip()
