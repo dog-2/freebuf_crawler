@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-# import os
-# import sys
+import os
+import sys
 
-# sys.path.insert(0, os.path.join(os.path.abspath('.'), 'freebuf_crawler'))
+sys.path.insert(0, os.path.join(os.path.abspath('.'), 'freebuf_crawler'))
 
 from freebuf_crawler.items import FreebufCrawlerItem
 
@@ -39,6 +39,11 @@ class FreebufSpider(scrapy.Spider):
 
     def _parse_news_info(self, news_div):
         title = news_div.xpath("dl/dt/a/@title").extract_first().strip()
+        # fix bug when getting title of:
+        #     https://www.freebuf.com/articles/terminal/36406.html
+        #     https://www.freebuf.com/articles/terminal/36406.html
+        if not title.strip():
+            title = news_div.xpath("dl/dt/a/text()").extract_first().strip()
         url = news_div.xpath("dl/dt/a/@href").extract_first().strip()
         time_str = news_div.xpath(
             "dl/dd/span[@class='time']/text()").extract_first().strip()
