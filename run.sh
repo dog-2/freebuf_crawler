@@ -1,0 +1,1 @@
+scrapy crawl freebuf -o freebuf.json -s JOBDIR=jobs/job-1
