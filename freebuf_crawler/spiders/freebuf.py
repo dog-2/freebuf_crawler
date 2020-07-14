@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-import os
-import sys
+# import os
+# import sys
 
-sys.path.insert(0, os.path.join(os.path.abspath('.'), 'freebuf_crawler'))
+# sys.path.insert(0, os.path.join(os.path.abspath('.'), 'freebuf_crawler'))
 
 from freebuf_crawler.items import FreebufCrawlerItem
 
@@ -49,9 +49,11 @@ class FreebufSpider(scrapy.Spider):
             "dl/dd/span[@class='time']/text()").extract_first().strip()
         level = self.__parse_level(news_div)
         num_look = news_div.xpath(
-            "div[@class='news_bot']/span[@class='look']/strong/text()").extract()[0].strip()
+            "div[@class='news_bot']/span[@class='look']/strong[1]/text()").extract_first()
+        num_look = num_look.strip() if num_look else 0
         num_comment = news_div.xpath(
-            "div[@class='news_bot']/span[@class='look']/strong/text()").extract()[-1].strip()
+            "div[@class='news_bot']/span[@class='look']/strong[2]/text()").extract_first()
+        num_comment = num_comment.strip() if num_comment else 0
         author = news_div.xpath(
             "dl/dd/span[contains(@class, 'name')]/a/text()").extract_first()
         if not author: # when author is not a link
